@@ -417,7 +417,7 @@ function (_React$Component) {
       this.dataManager.setColumns(props.columns);
       this.dataManager.setDefaultExpanded(props.options.defaultExpanded);
 
-      if (props.options.multiSorting) {
+      if (props.options.multiColumnSorting) {
         this.dataManager.setMultiSortLimit(props.options.multiColumnSortLimit);
       }
 
@@ -659,7 +659,7 @@ function (_React$Component) {
           onOrderChange: _this4.onChangeOrder,
           actionsHeaderIndex: props.options.actionsColumnIndex,
           sorting: props.options.sorting,
-          multiSorting: props.options.multiSorting,
+          multiColumnSorting: props.options.multiColumnSorting,
           grouping: props.options.grouping,
           isTreeData: _this4.props.parentChildData !== undefined,
           draggable: props.options.draggable
