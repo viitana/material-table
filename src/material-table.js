@@ -62,7 +62,10 @@ export default class MaterialTable extends React.Component {
 
     this.dataManager.setColumns(props.columns);
     this.dataManager.setDefaultExpanded(props.options.defaultExpanded);
-    this.dataManager.setMultiSortLimit(props.options.multiColumnSortLimit);
+
+    if(props.options.multiSorting) {
+      this.dataManager.setMultiSortLimit(props.options.multiColumnSortLimit);
+    }
 
     if (this.isRemoteData(props)) {
       this.dataManager.changeApplySearch(false);
@@ -538,6 +541,7 @@ export default class MaterialTable extends React.Component {
                           onOrderChange={this.onChangeOrder}
                           actionsHeaderIndex={props.options.actionsColumnIndex}
                           sorting={props.options.sorting}
+                          multiSorting={props.options.multiSorting}
                           grouping={props.options.grouping}
                           isTreeData={this.props.parentChildData !== undefined}
                           draggable={props.options.draggable}
