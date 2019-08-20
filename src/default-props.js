@@ -96,6 +96,7 @@ export const defaultProps = {
     selection: false,
     selectionProps: {},
     sorting: true,
+    multiColumnSortLimit: 1,
     toolbar: true,
     defaultExpanded: false,
     detailPanelColumnAlignment: 'left'

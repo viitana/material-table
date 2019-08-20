@@ -145,6 +145,7 @@ export const propTypes = {
     showTitle: PropTypes.bool,
     showTextRowsSelected: PropTypes.bool,
     sorting: PropTypes.bool,
+    multiColumnSortLimit: PropTypes.number,
     toolbar: PropTypes.bool,
   }),
   localization: PropTypes.shape({

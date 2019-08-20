@@ -32,8 +32,7 @@ export default class MaterialTable extends React.Component {
             operator: "=",
             value: a.tableData.filterValue
           })),
-        orderBy: renderState.columns.find(a => a.tableData.id === renderState.orderBy),
-        orderBys: renderState.columns.filter(a => renderState.orderBys.includes(a.tableData.id)),
+        orderBy: renderState.columns.filter(a => renderState.orderBy.includes(a.tableData.id)),
         orderDirection: renderState.orderDirection,
         page: 0,
         pageSize: calculatedProps.options.pageSize,
@@ -63,6 +62,7 @@ export default class MaterialTable extends React.Component {
 
     this.dataManager.setColumns(props.columns);
     this.dataManager.setDefaultExpanded(props.options.defaultExpanded);
+    this.dataManager.setMultiSortLimit(props.options.multiColumnSortLimit);
 
     if (this.isRemoteData(props)) {
       this.dataManager.changeApplySearch(false);
@@ -531,7 +531,6 @@ export default class MaterialTable extends React.Component {
                           showActionsColumn={props.actions && props.actions.filter(a => !a.isFreeAction && !this.props.options.selection).length > 0}
                           showSelectAllCheckbox={props.options.showSelectAllCheckbox}
                           orderBy={this.state.orderBy}
-                          orderBys={this.state.orderBys}
                           orderDirection={this.state.orderDirection}
                           onAllSelected={this.onAllSelected}
                           onOrderChange={this.onChangeOrder}
