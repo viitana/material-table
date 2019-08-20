@@ -33,6 +33,7 @@ export default class MaterialTable extends React.Component {
             value: a.tableData.filterValue
           })),
         orderBy: renderState.columns.find(a => a.tableData.id === renderState.orderBy),
+        orderBys: renderState.columns.filter(a => renderState.orderBys.includes(a.tableData.id)),
         orderDirection: renderState.orderDirection,
         page: 0,
         pageSize: calculatedProps.options.pageSize,
@@ -175,7 +176,7 @@ export default class MaterialTable extends React.Component {
 
   onChangeOrder = (orderBy, orderDirection) => {
     const newOrderBy = orderDirection === '' ? -1 : orderBy;
-    this.dataManager.changeOrder(newOrderBy, orderDirection);
+    this.dataManager.changeOrder(orderBy, orderDirection);
 
     if (this.isRemoteData()) {
       const query = { ...this.state.query };
