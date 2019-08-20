@@ -8,7 +8,6 @@ export default class DataManager {
   detailPanelType = 'multiple'
   lastDetailPanelRow = undefined;
   lastEditingRow = undefined;
-  orderBy = -1;
   orderDirection = '';
   pageSize = 5;
   paging = true;
@@ -18,6 +17,7 @@ export default class DataManager {
   treefiedDataLength = 0;
   treeDataMaxLevel = 0;
   defaultExpanded = false;
+  multiSortLimit = 1;
 
   data = [];
   columns = [];
@@ -29,7 +29,7 @@ export default class DataManager {
   sortedData = [];
   pagedData = [];
   renderData = [];
-  orderBys=[];
+  orderBy=[];
 
   filtered = false;
   searched = false;
@@ -73,6 +73,10 @@ export default class DataManager {
 
   setDefaultExpanded(expanded) {
     this.defaultExpanded = expanded;
+  }
+
+  setMultiSortLimit(limit) {
+    this.multiSortLimit = limit;
   }
 
   changeApplySearch(applySearch) {
@@ -211,22 +215,18 @@ export default class DataManager {
   }
 
   changeOrder(orderBy, orderDirection) {
-    this.orderBy = orderBy;
-    this.orderDirection = orderDirection;
-    this.currentPage = 0;
-
-    const existing = this.orderBys.find(a => a.id === orderBy);
+    const existing = this.orderBy.find(a => a.id === orderBy);
 
     if (existing) {
       if (orderDirection === '') {
-        this.orderBys.splice(this.orderBys.indexOf(existing), 1);
+        this.orderBy.splice(this.orderBy.indexOf(existing), 1);
       } else {
         existing.dir = orderDirection;
       }
     } else {
-      if (this.orderBys.length < 3) {
+      if (this.orderBy.length < this.multiSortLimit) {
         if (orderDirection !== '') {
-          this.orderBys.push({ id: orderBy, dir: orderDirection });
+          this.orderBy.push({ id: orderBy, dir: orderDirection });
         }
       } else {
         // Full
@@ -434,41 +434,19 @@ export default class DataManager {
   }
 
   sortList(list) {
-    const columnDef = this.columns.find(_ => _.tableData.id === this.orderBy);
-    let result = list;
-
-    if (columnDef.customSort) {
-      if (this.orderDirection === 'desc') {
-        result = list.sort((a, b) => columnDef.customSort(b, a, 'row'));
-      }
-      else {
-        result = list.sort((a, b) => columnDef.customSort(a, b, 'row'));
-      }
-    }
-    else {
-      result = list.sort(
-        this.orderDirection === 'desc'
-          ? (a, b) => this.sort(this.getFieldValue(b, columnDef), this.getFieldValue(a, columnDef), columnDef.type)
-          : (a, b) => this.sort(this.getFieldValue(a, columnDef), this.getFieldValue(b, columnDef), columnDef.type)
-      );
-    }
-    return result;
-  }
-
-  sortLists(list) {
     let result = list;
 
     result = list.sort((a,b) => {
       let i = 0, res = 0;
-      while (i < this.orderBys.length && res === 0) {
-        const columnDef = this.columns.find(_ => _.tableData.id === this.orderBys[i].id);
-        const direction = this.orderBys[i].dir;
+      while (i < this.orderBy.length && res === 0) {
+        const columnDef = this.columns.find(_ => _.tableData.id === this.orderBy[i].id);
+        const direction = this.orderBy[i].dir;
         if (!columnDef.customSort) {
           res = direction === 'desc'
             ? this.sort(this.getFieldValue(b, columnDef), this.getFieldValue(a, columnDef), columnDef.type)
             : this.sort(this.getFieldValue(a, columnDef), this.getFieldValue(b, columnDef), columnDef.type);
         } else {
-          res = this.orderBys[i].dir === 'desc'
+          res = this.orderBy[i].dir === 'desc'
             ? columnDef.customSort(b, a, 'row')
             : columnDef.customSort(a, b, 'row');
         }
@@ -511,7 +489,6 @@ export default class DataManager {
       data: this.sortedData,
       lastEditingRow: this.lastEditingRow,
       orderBy: this.orderBy,
-      orderBys: this.orderBys,
       orderDirection: this.orderDirection,
       originalData: this.data,
       pageSize: this.pageSize,
@@ -810,8 +787,8 @@ export default class DataManager {
             sortGroupData(element.groups, level + 1);
           }
           else {
-            if (this.orderBys.length > 0 && this.orderDirection) {
-              element.data = this.sortLists(element.data);
+            if (this.orderBy.length > 0 && this.orderDirection) {
+              element.data = this.sortList(element.data);
             }
           }
         });
@@ -821,13 +798,13 @@ export default class DataManager {
     }
     else if (this.isDataType("tree")) {
       this.sortedData = [...this.treefiedData];
-      if (this.orderBys.length > 0) {
-        this.sortedData = this.sortLists(this.sortedData);
+      if (this.orderBy.length > 0) {
+        this.sortedData = this.sortList(this.sortedData);
 
         const sortTree = (list) => {
           list.forEach(item => {
             if (item.tableData.childRows) {
-              item.tableData.childRows = this.sortLists(item.tableData.childRows);
+              item.tableData.childRows = this.sortList(item.tableData.childRows);
               sortTree(item.tableData.childRows);
             }
           });
@@ -838,8 +815,8 @@ export default class DataManager {
     }
     else if (this.isDataType("normal")) {
       this.sortedData = [...this.searchedData];
-      if (this.orderBys.length > 0) {
-        this.sortedData = this.sortLists(this.sortedData);
+      if (this.orderBy.length > 0) {
+        this.sortedData = this.sortList(this.sortedData);
       }
     }
 

@@ -38,8 +38,8 @@ export class MTableHeader extends React.Component {
         }
 
         if (columnDef.sorting !== false && this.props.sorting) {
-          const ordering = this.props.orderBys
-            ? this.props.orderBys.find(a => a.id === columnDef.tableData.id)
+          const ordering = this.props.orderBy
+            ? this.props.orderBy.find(a => a.id === columnDef.tableData.id)
             : undefined;
           const direction = ordering ? ordering.dir : 'asc';
           content = (
@@ -62,7 +62,7 @@ export class MTableHeader extends React.Component {
               }}
             >
               {content}
-              {ordering ? `(${this.props.orderBys.indexOf(ordering)+1})` : ''}
+              {ordering ? `(${this.props.orderBy.indexOf(ordering)+1})` : ''}
             </TableSortLabel>
           );
         }
@@ -203,7 +203,7 @@ MTableHeader.propTypes = {
   sorting: PropTypes.bool,
   onAllSelected: PropTypes.func,
   onOrderChange: PropTypes.func,
-  orderBy: PropTypes.number,
+  orderBy: PropTypes.array,
   orderDirection: PropTypes.string,
   actionsHeaderIndex: PropTypes.number,
   showActionsColumn: PropTypes.bool,
