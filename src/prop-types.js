@@ -145,7 +145,7 @@ export const propTypes = {
     showTitle: PropTypes.bool,
     showTextRowsSelected: PropTypes.bool,
     sorting: PropTypes.bool,
-    multiSorting: PropTypes.bool,
+    multiColumnSorting: PropTypes.bool,
     multiColumnSortLimit: PropTypes.number,
     toolbar: PropTypes.bool,
   }),

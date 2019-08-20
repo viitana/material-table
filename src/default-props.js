@@ -96,7 +96,7 @@ export const defaultProps = {
     selection: false,
     selectionProps: {},
     sorting: true,
-    multiSorting: false,
+    multiColumnSorting: false,
     multiColumnSortLimit: 3,
     toolbar: true,
     defaultExpanded: false,
