@@ -232,7 +232,6 @@ export default class DataManager {
         // Full
       }
     }
-
     this.sorted = false;
   }
 
@@ -512,7 +511,7 @@ export default class DataManager {
       data: this.sortedData,
       lastEditingRow: this.lastEditingRow,
       orderBy: this.orderBy,
-      orderBys : this.orderBys,
+      orderBys: this.orderBys,
       orderDirection: this.orderDirection,
       originalData: this.data,
       pageSize: this.pageSize,
@@ -812,7 +811,7 @@ export default class DataManager {
           }
           else {
             if (this.orderBys.length > 0 && this.orderDirection) {
-              element.data = this.sortList(element.data);
+              element.data = this.sortLists(element.data);
             }
           }
         });
@@ -823,12 +822,12 @@ export default class DataManager {
     else if (this.isDataType("tree")) {
       this.sortedData = [...this.treefiedData];
       if (this.orderBys.length > 0) {
-        this.sortedData = this.sortList(this.sortedData);
+        this.sortedData = this.sortLists(this.sortedData);
 
         const sortTree = (list) => {
           list.forEach(item => {
             if (item.tableData.childRows) {
-              item.tableData.childRows = this.sortList(item.tableData.childRows);
+              item.tableData.childRows = this.sortLists(item.tableData.childRows);
               sortTree(item.tableData.childRows);
             }
           });

@@ -533,6 +533,7 @@ export default class MaterialTable extends React.Component {
                           showActionsColumn={props.actions && props.actions.filter(a => !a.isFreeAction && !this.props.options.selection).length > 0}
                           showSelectAllCheckbox={props.options.showSelectAllCheckbox}
                           orderBy={this.state.orderBy}
+                          orderBys={this.state.orderBys}
                           orderDirection={this.state.orderDirection}
                           onAllSelected={this.onAllSelected}
                           onOrderChange={this.onChangeOrder}
