@@ -8,6 +8,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
+import { Icon } from '@material-ui/core';
 /* eslint-enable no-unused-vars */
 
 export class MTableHeader extends React.Component {
@@ -37,26 +38,31 @@ export class MTableHeader extends React.Component {
         }
 
         if (columnDef.sorting !== false && this.props.sorting) {
+          const ordering = this.props.orderBys
+            ? this.props.orderBys.find(a => a.id === columnDef.tableData.id)
+            : undefined;
+          const direction = ordering ? ordering.dir : 'asc';
           content = (
             <TableSortLabel
               IconComponent={this.props.icons.SortArrow}
-              active={this.props.orderBy === columnDef.tableData.id}
-              direction={this.props.orderDirection || 'asc'}
+              active={ordering !== undefined}
+              direction={direction}
               onClick={() => {
                 const orderDirection =
-                  columnDef.tableData.id !== this.props.orderBy
+                  ordering === undefined
                     ? 'asc'
-                    : this.props.orderDirection === 'asc'
+                    : direction === 'asc'
                     ? 'desc'
-                    : this.props.orderDirection === 'desc'
+                    : direction === 'desc'
                     ? ''
-                    : this.props.orderDirection === ''
+                    : direction === ''
                     ? 'asc'
                     : 'desc';
                 this.props.onOrderChange(columnDef.tableData.id, orderDirection);
               }}
             >
               {content}
+              {ordering ? `(${this.props.orderBys.indexOf(ordering)+1})` : ''}
             </TableSortLabel>
           );
         }
