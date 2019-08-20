@@ -29,6 +29,7 @@ export default class DataManager {
   sortedData = [];
   pagedData = [];
   renderData = [];
+  orderBys=[];
 
   filtered = false;
   searched = false;
@@ -213,6 +214,24 @@ export default class DataManager {
     this.orderBy = orderBy;
     this.orderDirection = orderDirection;
     this.currentPage = 0;
+
+    const existing = this.orderBys.find(a => a.id === orderBy);
+
+    if (existing) {
+      if (orderDirection === '') {
+        this.orderBys.splice(this.orderBys.indexOf(existing), 1);
+      } else {
+        existing.dir = orderDirection;
+      }
+    } else {
+      if (this.orderBys.length < 3) {
+        if (orderDirection !== '') {
+          this.orderBys.push({ id: orderBy, dir: orderDirection });
+        }
+      } else {
+        // Full
+      }
+    }
 
     this.sorted = false;
   }
@@ -434,6 +453,30 @@ export default class DataManager {
           : (a, b) => this.sort(this.getFieldValue(a, columnDef), this.getFieldValue(b, columnDef), columnDef.type)
       );
     }
+    return result;
+  }
+
+  sortLists(list) {
+    let result = list;
+
+    result = list.sort((a,b) => {
+      let i = 0, res = 0;
+      while (i < this.orderBys.length && res === 0) {
+        const columnDef = this.columns.find(_ => _.tableData.id === this.orderBys[i].id);
+        const direction = this.orderBys[i].dir;
+        if (!columnDef.customSort) {
+          res = direction === 'desc'
+            ? this.sort(this.getFieldValue(b, columnDef), this.getFieldValue(a, columnDef), columnDef.type)
+            : this.sort(this.getFieldValue(a, columnDef), this.getFieldValue(b, columnDef), columnDef.type);
+        } else {
+          res = this.orderBys[i].dir === 'desc'
+            ? columnDef.customSort(b, a, 'row')
+            : columnDef.customSort(a, b, 'row');
+        }
+        i++;
+      }
+      return res;
+    });
 
     return result;
   }
@@ -469,6 +512,7 @@ export default class DataManager {
       data: this.sortedData,
       lastEditingRow: this.lastEditingRow,
       orderBy: this.orderBy,
+      orderBys : this.orderBys,
       orderDirection: this.orderDirection,
       originalData: this.data,
       pageSize: this.pageSize,
@@ -767,7 +811,7 @@ export default class DataManager {
             sortGroupData(element.groups, level + 1);
           }
           else {
-            if (this.orderBy >= 0 && this.orderDirection) {
+            if (this.orderBys.length > 0 && this.orderDirection) {
               element.data = this.sortList(element.data);
             }
           }
@@ -778,7 +822,7 @@ export default class DataManager {
     }
     else if (this.isDataType("tree")) {
       this.sortedData = [...this.treefiedData];
-      if (this.orderBy != -1) {
+      if (this.orderBys.length > 0) {
         this.sortedData = this.sortList(this.sortedData);
 
         const sortTree = (list) => {
@@ -795,8 +839,8 @@ export default class DataManager {
     }
     else if (this.isDataType("normal")) {
       this.sortedData = [...this.searchedData];
-      if (this.orderBy != -1) {
-        this.sortedData = this.sortList(this.sortedData);
+      if (this.orderBys.length > 0) {
+        this.sortedData = this.sortLists(this.sortedData);
       }
     }
 
