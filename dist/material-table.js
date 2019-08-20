@@ -376,11 +376,8 @@ function (_React$Component) {
             value: a.tableData.filterValue
           };
         }),
-        orderBy: renderState.columns.find(function (a) {
-          return a.tableData.id === renderState.orderBy;
-        }),
-        orderBys: renderState.columns.filter(function (a) {
-          return renderState.orderBys.includes(a.tableData.id);
+        orderBy: renderState.columns.filter(function (a) {
+          return renderState.orderBy.includes(a.tableData.id);
         }),
         orderDirection: renderState.orderDirection,
         page: 0,
@@ -419,6 +416,10 @@ function (_React$Component) {
 
       this.dataManager.setColumns(props.columns);
       this.dataManager.setDefaultExpanded(props.options.defaultExpanded);
+
+      if (props.options.multiSorting) {
+        this.dataManager.setMultiSortLimit(props.options.multiColumnSortLimit);
+      }
 
       if (this.isRemoteData(props)) {
         this.dataManager.changeApplySearch(false);
@@ -653,12 +654,12 @@ function (_React$Component) {
           }).length > 0,
           showSelectAllCheckbox: props.options.showSelectAllCheckbox,
           orderBy: _this4.state.orderBy,
-          orderBys: _this4.state.orderBys,
           orderDirection: _this4.state.orderDirection,
           onAllSelected: _this4.onAllSelected,
           onOrderChange: _this4.onChangeOrder,
           actionsHeaderIndex: props.options.actionsColumnIndex,
           sorting: props.options.sorting,
+          multiSorting: props.options.multiSorting,
           grouping: props.options.grouping,
           isTreeData: _this4.props.parentChildData !== undefined,
           draggable: props.options.draggable

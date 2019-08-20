@@ -34,7 +34,6 @@ function () {
     (0, _defineProperty2["default"])(this, "detailPanelType", 'multiple');
     (0, _defineProperty2["default"])(this, "lastDetailPanelRow", undefined);
     (0, _defineProperty2["default"])(this, "lastEditingRow", undefined);
-    (0, _defineProperty2["default"])(this, "orderBy", -1);
     (0, _defineProperty2["default"])(this, "orderDirection", '');
     (0, _defineProperty2["default"])(this, "pageSize", 5);
     (0, _defineProperty2["default"])(this, "paging", true);
@@ -44,6 +43,7 @@ function () {
     (0, _defineProperty2["default"])(this, "treefiedDataLength", 0);
     (0, _defineProperty2["default"])(this, "treeDataMaxLevel", 0);
     (0, _defineProperty2["default"])(this, "defaultExpanded", false);
+    (0, _defineProperty2["default"])(this, "multiSortLimit", 1);
     (0, _defineProperty2["default"])(this, "data", []);
     (0, _defineProperty2["default"])(this, "columns", []);
     (0, _defineProperty2["default"])(this, "filteredData", []);
@@ -53,7 +53,7 @@ function () {
     (0, _defineProperty2["default"])(this, "sortedData", []);
     (0, _defineProperty2["default"])(this, "pagedData", []);
     (0, _defineProperty2["default"])(this, "renderData", []);
-    (0, _defineProperty2["default"])(this, "orderBys", []);
+    (0, _defineProperty2["default"])(this, "orderBy", []);
     (0, _defineProperty2["default"])(this, "filtered", false);
     (0, _defineProperty2["default"])(this, "searched", false);
     (0, _defineProperty2["default"])(this, "grouped", false);
@@ -145,7 +145,6 @@ function () {
         data: _this.sortedData,
         lastEditingRow: _this.lastEditingRow,
         orderBy: _this.orderBy,
-        orderBys: _this.orderBys,
         orderDirection: _this.orderDirection,
         originalData: _this.data,
         pageSize: _this.pageSize,
@@ -308,6 +307,11 @@ function () {
       this.defaultExpanded = expanded;
     }
   }, {
+    key: "setMultiSortLimit",
+    value: function setMultiSortLimit(limit) {
+      this.multiSortLimit = limit;
+    }
+  }, {
     key: "changeApplySearch",
     value: function changeApplySearch(applySearch) {
       this.applySearch = applySearch;
@@ -456,23 +460,20 @@ function () {
   }, {
     key: "changeOrder",
     value: function changeOrder(orderBy, orderDirection) {
-      this.orderBy = orderBy;
-      this.orderDirection = orderDirection;
-      this.currentPage = 0;
-      var existing = this.orderBys.find(function (a) {
+      var existing = this.orderBy.find(function (a) {
         return a.id === orderBy;
       });
 
       if (existing) {
         if (orderDirection === '') {
-          this.orderBys.splice(this.orderBys.indexOf(existing), 1);
+          this.orderBy.splice(this.orderBy.indexOf(existing), 1);
         } else {
           existing.dir = orderDirection;
         }
       } else {
-        if (this.orderBys.length < 3) {
+        if (this.orderBy.length < this.multiSortLimit) {
           if (orderDirection !== '') {
-            this.orderBys.push({
+            this.orderBy.push({
               id: orderBy,
               dir: orderDirection
             });
@@ -649,52 +650,22 @@ function () {
     value: function sortList(list) {
       var _this4 = this;
 
-      var columnDef = this.columns.find(function (_) {
-        return _.tableData.id === _this4.orderBy;
-      });
-      var result = list;
-
-      if (columnDef.customSort) {
-        if (this.orderDirection === 'desc') {
-          result = list.sort(function (a, b) {
-            return columnDef.customSort(b, a, 'row');
-          });
-        } else {
-          result = list.sort(function (a, b) {
-            return columnDef.customSort(a, b, 'row');
-          });
-        }
-      } else {
-        result = list.sort(this.orderDirection === 'desc' ? function (a, b) {
-          return _this4.sort(_this4.getFieldValue(b, columnDef), _this4.getFieldValue(a, columnDef), columnDef.type);
-        } : function (a, b) {
-          return _this4.sort(_this4.getFieldValue(a, columnDef), _this4.getFieldValue(b, columnDef), columnDef.type);
-        });
-      }
-
-      return result;
-    }
-  }, {
-    key: "sortLists",
-    value: function sortLists(list) {
-      var _this5 = this;
-
       var result = list;
       result = list.sort(function (a, b) {
         var i = 0,
             res = 0;
 
-        while (i < _this5.orderBys.length && res === 0) {
-          var columnDef = _this5.columns.find(function (_) {
-            return _.tableData.id === _this5.orderBys[i].id;
+        while (i < _this4.orderBy.length && res === 0) {
+          var columnDef = _this4.columns.find(function (_) {
+            return _.tableData.id === _this4.orderBy[i].id;
           });
 
-          var direction = _this5.orderBys[i].dir;
+          var direction = _this4.orderBy[i].dir;
 
           if (!columnDef.customSort) {
-            res = direction === 'desc' ? _this5.sort(_this5.getFieldValue(b, columnDef), _this5.getFieldValue(a, columnDef), columnDef.type) : _this5.sort(_this5.getFieldValue(a, columnDef), _this5.getFieldValue(b, columnDef), columnDef.type);
+            res = direction === 'desc' ? _this4.sort(_this4.getFieldValue(b, columnDef), _this4.getFieldValue(a, columnDef), columnDef.type) : _this4.sort(_this4.getFieldValue(a, columnDef), _this4.getFieldValue(b, columnDef), columnDef.type);
           } else {
-            res = _this5.orderBys[i].dir === 'desc' ? columnDef.customSort(b, a, 'row') : columnDef.customSort(a, b, 'row');
+            res = _this4.orderBy[i].dir === 'desc' ? columnDef.customSort(b, a, 'row') : columnDef.customSort(a, b, 'row');
           }
 
           i++;
@@ -707,7 +678,7 @@ function () {
   }, {
     key: "groupData",
     value: function groupData() {
-      var _this6 = this;
+      var _this5 = this;
 
       this.sorted = this.paged = false;
       var tmpData = (0, _toConsumableArray2["default"])(this.searchedData);
@@ -728,8 +699,8 @@ function () {
 
           if (!group) {
             var path = [].concat((0, _toConsumableArray2["default"])(o.path || []), [value]);
-            var oldGroup = _this6.findGroupByGroupPath(_this6.groupedData, path) || {
-              isExpanded: _this6.defaultExpanded ? true : false
+            var oldGroup = _this5.findGroupByGroupPath(_this5.groupedData, path) || {
+              isExpanded: _this5.defaultExpanded ? true : false
             };
             group = {
               value: value,
@@ -758,7 +729,7 @@ function () {
   }, {
     key: "treefyData",
     value: function treefyData() {
-      var _this7 = this;
+      var _this6 = this;
 
       this.sorted = this.paged = false;
       this.data.forEach(function (a) {
@@ -781,25 +752,25 @@ function () {
       var addRow = function addRow(rowData) {
         rowData.tableData.markedForTreeRemove = false;
 
-        var parent = _this7.parentFunc(rowData, _this7.data);
+        var parent = _this6.parentFunc(rowData, _this6.data);
 
         if (parent) {
           parent.tableData.childRows = parent.tableData.childRows || [];
 
           if (!parent.tableData.childRows.includes(rowData)) {
             parent.tableData.childRows.push(rowData);
-            _this7.treefiedDataLength++;
+            _this6.treefiedDataLength++;
           }
 
           addRow(parent);
           rowData.tableData.path = [].concat((0, _toConsumableArray2["default"])(parent.tableData.path), [parent.tableData.childRows.length - 1]);
-          _this7.treeDataMaxLevel = Math.max(_this7.treeDataMaxLevel, rowData.tableData.path.length);
+          _this6.treeDataMaxLevel = Math.max(_this6.treeDataMaxLevel, rowData.tableData.path.length);
         } else {
-          if (!_this7.treefiedData.includes(rowData)) {
-            _this7.treefiedData.push(rowData);
+          if (!_this6.treefiedData.includes(rowData)) {
+            _this6.treefiedData.push(rowData);
 
-            _this7.treefiedDataLength++;
-            rowData.tableData.path = [_this7.treefiedData.length - 1];
+            _this6.treefiedDataLength++;
+            rowData.tableData.path = [_this6.treefiedData.length - 1];
           }
         }
       }; // Add all rows initially
@@ -810,7 +781,7 @@ function () {
       });
 
       var markForTreeRemove = function markForTreeRemove(rowData) {
-        var pointer = _this7.treefiedData;
+        var pointer = _this6.treefiedData;
         rowData.tableData.path.forEach(function (pathPart) {
           if (pointer.tableData && pointer.tableData.childRows) {
             pointer = pointer.tableData.childRows;
@@ -833,21 +804,21 @@ function () {
 
 
       this.data.forEach(function (rowData) {
-        if (!_this7.searchText && !_this7.columns.some(function (columnDef) {
+        if (!_this6.searchText && !_this6.columns.some(function (columnDef) {
           return columnDef.tableData.filterValue;
         })) {
-          rowData.tableData.isTreeExpanded = rowData.tableData.isTreeExpanded === undefined ? _this7.defaultExpanded : rowData.tableData.isTreeExpanded;
+          rowData.tableData.isTreeExpanded = rowData.tableData.isTreeExpanded === undefined ? _this6.defaultExpanded : rowData.tableData.isTreeExpanded;
         }
 
         var hasSearchMatchedChildren = rowData.tableData.isTreeExpanded;
 
-        if (!hasSearchMatchedChildren && _this7.searchedData.indexOf(rowData) < 0) {
+        if (!hasSearchMatchedChildren && _this6.searchedData.indexOf(rowData) < 0) {
           markForTreeRemove(rowData);
         }
       }); // preserve all children of nodes that are matched by search or filters
 
       this.data.forEach(function (rowData) {
-        if (_this7.searchedData.indexOf(rowData) > -1) {
+        if (_this6.searchedData.indexOf(rowData) > -1) {
           traverseChildrenAndUnmark(rowData);
         }
       });
@@ -870,7 +841,7 @@ function () {
   }, {
     key: "sortData",
     value: function sortData() {
-      var _this8 = this;
+      var _this7 = this;
 
       this.paged = false;
 
@@ -891,9 +862,9 @@ function () {
             });
           } else {
             return list.sort(columnDef.tableData.groupSort === 'desc' ? function (a, b) {
-              return _this8.sort(b.value, a.value, columnDef.type);
+              return _this7.sort(b.value, a.value, columnDef.type);
             } : function (a, b) {
-              return _this8.sort(a.value, b.value, columnDef.type);
+              return _this7.sort(a.value, b.value, columnDef.type);
             });
           }
         };
@@ -907,8 +878,8 @@ function () {
               element.groups = sortGroups(element.groups, column);
               sortGroupData(element.groups, level + 1);
             } else {
-              if (_this8.orderBys.length > 0 && _this8.orderDirection) {
-                element.data = _this8.sortLists(element.data);
+              if (_this7.orderBy.length > 0 && _this7.orderDirection) {
+                element.data = _this7.sortList(element.data);
               }
             }
           });
@@ -918,13 +889,13 @@ function () {
       } else if (this.isDataType("tree")) {
         this.sortedData = (0, _toConsumableArray2["default"])(this.treefiedData);
 
-        if (this.orderBys.length > 0) {
-          this.sortedData = this.sortLists(this.sortedData);
+        if (this.orderBy.length > 0) {
+          this.sortedData = this.sortList(this.sortedData);
 
           var sortTree = function sortTree(list) {
             list.forEach(function (item) {
               if (item.tableData.childRows) {
-                item.tableData.childRows = _this8.sortLists(item.tableData.childRows);
+                item.tableData.childRows = _this7.sortList(item.tableData.childRows);
                 sortTree(item.tableData.childRows);
               }
             });
@@ -935,8 +906,8 @@ function () {
       } else if (this.isDataType("normal")) {
         this.sortedData = (0, _toConsumableArray2["default"])(this.searchedData);
 
-        if (this.orderBys.length > 0) {
-          this.sortedData = this.sortLists(this.sortedData);
+        if (this.orderBy.length > 0) {
+          this.sortedData = this.sortList(this.sortedData);
         }
       }
 

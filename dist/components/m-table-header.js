@@ -81,7 +81,7 @@ function (_React$Component) {
         }
 
         if (columnDef.sorting !== false && _this.props.sorting) {
-          var ordering = _this.props.orderBys ? _this.props.orderBys.find(function (a) {
+          var ordering = _this.props.orderBy ? _this.props.orderBy.find(function (a) {
             return a.id === columnDef.tableData.id;
           }) : undefined;
           var direction = ordering ? ordering.dir : 'asc';
@@ -94,7 +94,7 @@ function (_React$Component) {
 
               _this.props.onOrderChange(columnDef.tableData.id, orderDirection);
             }
-          }, content, ordering ? "(".concat(_this.props.orderBys.indexOf(ordering) + 1, ")") : '');
+          }, content, ordering && _this.props.multiSorting ? "(".concat(_this.props.orderBy.indexOf(ordering) + 1, ")") : '');
         }
 
         return React.createElement(_TableCell["default"], {
@@ -234,7 +234,7 @@ MTableHeader.propTypes = {
   sorting: _propTypes["default"].bool,
   onAllSelected: _propTypes["default"].func,
   onOrderChange: _propTypes["default"].func,
-  orderBy: _propTypes["default"].number,
+  orderBy: _propTypes["default"].array,
   orderDirection: _propTypes["default"].string,
   actionsHeaderIndex: _propTypes["default"].number,
   showActionsColumn: _propTypes["default"].bool,

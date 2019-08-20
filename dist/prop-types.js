@@ -151,6 +151,8 @@ var propTypes = {
     showTitle: _propTypes["default"].bool,
     showTextRowsSelected: _propTypes["default"].bool,
     sorting: _propTypes["default"].bool,
+    multiSorting: _propTypes["default"].bool,
+    multiColumnSortLimit: _propTypes["default"].number,
     toolbar: _propTypes["default"].bool
   }),
   localization: _propTypes["default"].shape({

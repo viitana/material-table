@@ -201,6 +201,8 @@ var defaultProps = {
     selection: false,
     selectionProps: {},
     sorting: true,
+    multiSorting: false,
+    multiColumnSortLimit: 3,
     toolbar: true,
     defaultExpanded: false,
     detailPanelColumnAlignment: 'left'
