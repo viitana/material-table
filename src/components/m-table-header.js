@@ -62,7 +62,7 @@ export class MTableHeader extends React.Component {
               }}
             >
               {content}
-              {ordering ? `(${this.props.orderBy.indexOf(ordering)+1})` : ''}
+              {ordering && this.props.multiSorting ? `(${this.props.orderBy.indexOf(ordering)+1})` : ''}
             </TableSortLabel>
           );
         }

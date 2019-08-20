@@ -80,7 +80,8 @@ class App extends Component {
                   options={{
                     selection: true,
                     columnsButton: true,
-                    filtering: 'true'
+                    filtering: 'true',
+                    multiSorting: true
                   }}
                   onSearchChange={(e) => console.log("search changed: " + e)}
                   onColumnDragged={(oldPos, newPos) => console.log("Dropped column from " + oldPos + " to position " + newPos)}
