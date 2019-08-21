@@ -147,6 +147,7 @@ export const propTypes = {
     sorting: PropTypes.bool,
     multiColumnSorting: PropTypes.bool,
     multiColumnSortLimit: PropTypes.number,
+    defaultSorting: PropTypes.array,
     toolbar: PropTypes.bool,
   }),
   localization: PropTypes.shape({

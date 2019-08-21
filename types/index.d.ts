@@ -220,6 +220,7 @@ export interface Options {
   sorting?: boolean;
   multiColumnSorting?: boolean;
   multiColumnSortLimit?: number;
+  defaultSorting?: Array;
   toolbar?: boolean;
   toolbarButtonAlignment?: 'left' | 'right';
   detailPanelColumnAlignment?: 'left' | 'right';
