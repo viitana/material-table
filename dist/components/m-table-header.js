@@ -94,7 +94,7 @@ function (_React$Component) {
 
               _this.props.onOrderChange(columnDef.tableData.id, orderDirection);
             }
-          }, content, ordering && _this.props.multiColumnSorting ? "(".concat(_this.props.orderBy.indexOf(ordering) + 1, ")") : '');
+          }, content, "\xA0", ordering && _this.props.multiColumnSorting ? "(".concat(_this.props.orderBy.indexOf(ordering) + 1, ")") : '');
         }
 
         return React.createElement(_TableCell["default"], {
