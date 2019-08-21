@@ -203,6 +203,7 @@ var defaultProps = {
     sorting: true,
     multiColumnSorting: false,
     multiColumnSortLimit: 0,
+    defaultSorting: [],
     toolbar: true,
     defaultExpanded: false,
     detailPanelColumnAlignment: 'left'

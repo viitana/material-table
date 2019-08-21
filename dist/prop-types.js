@@ -153,6 +153,7 @@ var propTypes = {
     sorting: _propTypes["default"].bool,
     multiColumnSorting: _propTypes["default"].bool,
     multiColumnSortLimit: _propTypes["default"].number,
+    defaultSorting: _propTypes["default"].array,
     toolbar: _propTypes["default"].bool
   }),
   localization: _propTypes["default"].shape({

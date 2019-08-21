@@ -307,6 +307,11 @@ function () {
       this.defaultExpanded = expanded;
     }
   }, {
+    key: "setDefaultSorting",
+    value: function setDefaultSorting(sorting) {
+      this.orderBy = sorting.slice(0, this.multiSortLimit);
+    }
+  }, {
     key: "setMultiSortLimit",
     value: function setMultiSortLimit(limit) {
       this.multiSortLimit = limit;

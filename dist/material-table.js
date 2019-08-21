@@ -416,6 +416,7 @@ function (_React$Component) {
 
       this.dataManager.setColumns(props.columns);
       this.dataManager.setDefaultExpanded(props.options.defaultExpanded);
+      this.dataManager.setDefaultSorting(props.options.defaultSorting);
 
       if (props.options.multiColumnSorting) {
         this.dataManager.setMultiSortLimit(props.options.multiColumnSortLimit);
