@@ -75,6 +75,10 @@ export default class DataManager {
     this.defaultExpanded = expanded;
   }
 
+  setDefaultSorting(sorting) {
+    this.orderBy = sorting.slice(0, this.multiSortLimit);
+  }
+
   setMultiSortLimit(limit) {
     this.multiSortLimit = limit;
   }
