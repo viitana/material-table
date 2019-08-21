@@ -41,8 +41,6 @@ var _withStyles = _interopRequireDefault(require("@material-ui/core/styles/withS
 
 var _reactBeautifulDnd = require("react-beautiful-dnd");
 
-var _core = require("@material-ui/core");
-
 /* eslint-disable no-unused-vars */
 
 /* eslint-enable no-unused-vars */

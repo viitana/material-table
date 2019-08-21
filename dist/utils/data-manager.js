@@ -471,14 +471,20 @@ function () {
           existing.dir = orderDirection;
         }
       } else {
-        if (this.orderBy.length < this.multiSortLimit) {
-          if (orderDirection !== '') {
+        if (orderDirection !== '') {
+          if (this.orderBy.length < this.multiSortLimit || this.multiSortLimit === 0) {
             this.orderBy.push({
               id: orderBy,
               dir: orderDirection
             });
+          } else {
+            if (this.multiSortLimit === 1 && this.orderBy.length === 1) {
+              this.orderBy = [{
+                id: orderBy,
+                dir: orderDirection
+              }];
+            }
           }
-        } else {// Full
         }
       }
 
