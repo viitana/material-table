@@ -220,18 +220,24 @@ export default class DataManager {
     if (existing) {
       if (orderDirection === '') {
         this.orderBy.splice(this.orderBy.indexOf(existing), 1);
-      } else {
+      }
+      else {
         existing.dir = orderDirection;
       }
-    } else {
-      if (this.orderBy.length < this.multiSortLimit) {
-        if (orderDirection !== '') {
+    }
+    else {
+      if (orderDirection !== '') {
+        if (this.orderBy.length < this.multiSortLimit || this.multiSortLimit === 0) {
           this.orderBy.push({ id: orderBy, dir: orderDirection });
         }
-      } else {
-        // Full
+        else {
+          if(this.multiSortLimit === 1 && this.orderBy.length === 1) {
+            this.orderBy = [{ id: orderBy, dir: orderDirection }];
+          }
+        }
       }
     }
+
     this.sorted = false;
   }
 
