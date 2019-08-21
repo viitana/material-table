@@ -99,11 +99,11 @@ function (_React$Component) {
         query.orderDirection = orderDirection;
 
         _this.onQueryChange(query, function () {
-          _this.props.onOrderChange && _this.props.onOrderChange(newOrderBy, orderDirection, _this.orderBy);
+          _this.props.onOrderChange && _this.props.onOrderChange(newOrderBy, orderDirection, _this.state.orderBy);
         });
       } else {
         _this.setState(_this.dataManager.getRenderState(), function () {
-          _this.props.onOrderChange && _this.props.onOrderChange(newOrderBy, orderDirection, _this.orderBy);
+          _this.props.onOrderChange && _this.props.onOrderChange(newOrderBy, orderDirection, _this.state.orderBy);
         });
       }
     });
