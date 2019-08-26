@@ -232,7 +232,7 @@ export default class DataManager {
     else {
       if (orderDirection !== '') {
         if (this.orderBy.length < this.multiSortLimit || this.multiSortLimit === 0) {
-          this.orderBy.push({ id: orderBy, dir: orderDirection });
+          this.orderBy.unshift({ id: orderBy, dir: orderDirection });
         }
         else {
           if(this.multiSortLimit === 1 && this.orderBy.length === 1) {
