@@ -478,7 +478,7 @@ function () {
       } else {
         if (orderDirection !== '') {
           if (this.orderBy.length < this.multiSortLimit || this.multiSortLimit === 0) {
-            this.orderBy.push({
+            this.orderBy.unshift({
               id: orderBy,
               dir: orderDirection
             });
